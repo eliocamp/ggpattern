@@ -118,14 +118,14 @@ GeomPolygonPattern <- ggproto("GeomPolygonPattern", GeomPolygon,
       # For gpar(), there is one entry per polygon (not one entry per point).
       # We'll pull the first value from each group, and assume all these values
       # are the same within each group.
-      first_idx <- !duplicated(munched$group)
+      first_idx <- !duplicated(interaction(munched$group, munched$subgroup))
       first_rows <- munched[first_idx, ]
 
       #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       # Calculate all the boundary_dfs for all the elements
       #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
       stopifnot(!is.null(munched$group))
-      polygons <- split(munched, munched$group)
+      polygons <- split(munched, interaction(munched$group, munched$subgroup))
       boundary_dfs <- lapply(polygons, function(polygon) {
         create_polygon_df(
           x = polygon$x,
